@@ -1,31 +1,7 @@
-const listUrl = "https://pokeapi.co/api/v2/pokemon?limit=3";
+const listUrl = "https://pokeapi.co/api/v2/pokemon?limit=10";
 
 // On stoque dans la variable cards le div avec la classe cards
 const cards = document.querySelector(".cards");
-
-// Le tableau de chats à adopter
-const animalsToAdopt = [
-  {
-    name: "Lucky",
-    picture: "https://placekitten.com/200/287"
-  },
-  {
-    name: "Symba",
-    picture: "https://placekitten.com/200/139"
-  },
-  {
-    name: "Léo",
-    picture: "https://placekitten.com/200/90"
-  },
-  {
-    name: "Milo",
-    picture: "https://placekitten.com/200/194"
-  },
-  {
-    name: "Charly",
-    picture: "https://placekitten.com/200/179"
-  }
-];
 
 
 function createCard(title, imageUrl) {
@@ -65,18 +41,7 @@ function createCard(title, imageUrl) {
   cardBody.appendChild(cardTitle);
 }
 
-/**
- * Étape 4
- * Créez une boucle for, pour chaque élément du tableau,
- * appelez la fonction createCard avec le paramètre correspondant
- */
-
-for (let i = 0; i < animalsToAdopt.length; i++) {
-  createCard(animalsToAdopt[i].name, animalsToAdopt[i].picture);
-}
-
-
-/* fetch(listUrl)
+fetch(listUrl)
 .then(response => response.json())
 .then((listData) => {
   const pokemons = listData.results;
@@ -85,7 +50,7 @@ for (let i = 0; i < animalsToAdopt.length; i++) {
     fetch(pokemon.url)
     .then(response => response.json())
     .then((data) => {
-      console.log(data);
+      createCard(data.name, data.sprites.front_default);
     })
   });
-}); */
+});
