@@ -87,6 +87,7 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: rgba(255, 255, 255, 0.495);
 }
 
 /* 
@@ -150,5 +151,6 @@ footer {
 
 .pagination-element.active {
   background-color: coral;
+  cursor: none;
 }
 
