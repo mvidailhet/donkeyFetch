@@ -25,52 +25,55 @@ const pokemonTypesColors = {
 // On stoque dans la variable cards le div avec la classe cards
 const cards = document.querySelector(".cards");
 
-function createCard(title, imageUrl, types) {
-  // On crée un div avec la classe card
-  const card = document.createElement("div");
-  card.classList.add("card");
-  cards.appendChild(card);
+function createAndAppendElement(elementType, parentElt, classesString) {
+  const classes = classesString.split(" ");
+  const elt = document.createElement(elementType);
+  classes.forEach((eltClass) => {
+    elt.classList.add(eltClass);
+  });
+  parentElt.appendChild(elt);
+  return elt;
+}
 
-  // On crée un div avec la classe card-header et on l'ajoute à la card
-  const cardHeader = document.createElement("div");
-  cardHeader.classList.add("card-header");
-  card.appendChild(cardHeader);
+function createAndAppendTextElement(
+  elementType,
+  parentElt,
+  text,
+  classes = []
+) {
+  const elt = createAndAppendElement(elementType, parentElt, classes);
+  elt.textContent = text;
+  return elt;
+}
 
-  // On crée un div avec la classe card-img et on l'ajoute à la cardHeader
-  const cardImg = document.createElement("div");
+function createCardHeader(cardElt, imageUrl) {
+  const cardHeader = createAndAppendElement("div", cardElt, "card-header");
+  const cardImg = createAndAppendElement("div", cardHeader, "card-img");
   cardImg.style.backgroundImage = `url(${imageUrl})`;
-  cardImg.classList.add("card-img");
-  cardHeader.appendChild(cardImg);
+}
 
-  /**
-   * Étape 1: Créez la div cardBody, ajoutez la classe card-body et ajoutez-la à la carte
-   */
-  const cardBodyElt = document.createElement("div");
-  cardBodyElt.classList.add("card-body");
-  card.appendChild(cardBodyElt);
+function createCardBody(card, title) {
+  const cardBodyElt = createAndAppendElement("div", card, "card-body");
+  return createAndAppendTextElement("h2", cardBodyElt, title, 'card-title');
+}
 
-  /**
-   * Étape 2
-   * Créez le h2 cardTitle, ajoutez la classe card-title,
-   * définissez le texte à l'intérieur de la balise sur le paramètre "title" de cette fonction
-   * et ajoutez-le à la cardBody
-   */
-  const h2Elt = document.createElement("h2");
-  h2Elt.classList.add("card-title");
-  h2Elt.textContent = title;
-  cardBodyElt.appendChild(h2Elt);
-
-  const pokemonTypesElt = document.createElement("ul");
-  pokemonTypesElt.classList.add("pokemon-types");
-  cardBodyElt.appendChild(pokemonTypesElt);
+function createPokemonTypesElements(cardBodyElt, types) {
+  const pokemonTypesElt = createAndAppendElement("ul", cardBodyElt, "pokemon-types");
 
   types.forEach((pokemonType) => {
-    const pokemonTypeElt = document.createElement("li");
-    pokemonTypeElt.classList.add("pokemon-type");
+    const pokemonTypeElt = createAndAppendTextElement("li", pokemonTypesElt, pokemonType, "pokemon-type");
     pokemonTypeElt.style.backgroundColor = pokemonTypesColors[pokemonType];
-    pokemonTypeElt.textContent = pokemonType;
-    pokemonTypesElt.appendChild(pokemonTypeElt);
   });
+}
+
+function createCard(title, imageUrl, types) {
+  const card = createAndAppendElement("div", cards, "card");
+
+  createCardHeader(card, imageUrl);
+
+  const cardBodyElt = createCardBody(card, title);
+
+  createPokemonTypesElements(cardBodyElt, types);
 }
 
 fetch(listUrl)
