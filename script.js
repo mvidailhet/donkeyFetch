@@ -1,9 +1,9 @@
-const listUrl = "https://pokeapi.co/api/v2/pokemon?limit=3";
+const listUrl = "https://pokeapi.co/api/v2/pokemon?limit=10";
 
 // On stoque dans la variable cards le div avec la classe cards
 const cards = document.querySelector(".cards");
 
-function createCard(title, imageUrl) {
+function createCard(title, imageUrl, types) {
   // On crée un div avec la classe card
   const card = document.createElement("div");
   card.classList.add("card");
@@ -36,14 +36,20 @@ function createCard(title, imageUrl) {
   const h2Elt = document.createElement("h2");
   h2Elt.classList.add("card-title");
   h2Elt.textContent = title;
-  cardBodyElt.append(h2Elt);
-}
+  cardBodyElt.appendChild(h2Elt);
 
-/**
- * Étape 4
- * Créez une boucle for, pour chaque élément du tableau,
- * appelez la fonction createCard avec le paramètre correspondant
- */
+
+  const pokemonTypesElt = document.createElement("ul");
+  pokemonTypesElt.classList.add("pokemon-types");
+  cardBodyElt.appendChild(pokemonTypesElt);
+
+  types.forEach((pokemonType) => {
+    const pokemonTypeElt = document.createElement("li");
+    pokemonTypeElt.classList.add("pokemon-type");
+    pokemonTypeElt.textContent = pokemonType;
+    pokemonTypesElt.appendChild(pokemonTypeElt);
+  });
+}
 
 fetch(listUrl)
   .then((response) => response.json())
@@ -54,7 +60,9 @@ fetch(listUrl)
       fetch(pokemon.url)
         .then((response) => response.json())
         .then((data) => {
-          createCard(data.name, data.sprites.front_default);
+          console.log(data);
+          const types = data.types.map(type => type.type.name);
+          createCard(data.name, data.sprites.front_default, types);
         });
     });
   });

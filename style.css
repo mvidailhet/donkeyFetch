@@ -46,3 +46,22 @@ header {
 .card-body h2 {
   margin: 10px 0px;
 }
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.pokemon-type {
+  border-radius: 5px;
+  font-size: 12px;
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #a9a9a9;
+  margin-right: 8px;
+}
+
+.pokemon-type:last {
+  margin-right: 0;
+}
