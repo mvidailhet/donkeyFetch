@@ -80,16 +80,20 @@ function hideLoader() {
   loaderContainerElt.classList.add("hidden");
 }
 
-fetchData(listUrl, 3000)
+fetchData(listUrl, 1500)
   .then((listData) => {
     const pokemons = listData.results;
-    pokemons.forEach((pokemon) => {
-      fetchData(pokemon.url)
-        .then((data) => {
-          const types = data.types.map((type) => type.type.name);
-          createCard(data.name, data.sprites.front_default, types);
-          hideLoader();
-        });
+
+    Promise.all(pokemons.map(pokemon => fetchData(pokemon.url)))
+    .then((pokemonsData) => {
+      const sortedPokemonsData = pokemonsData.sort((pokemonA, pokemonB) => pokemonA.id < pokemonB.id);
+      
+      sortedPokemonsData.forEach((pokemonData) => {
+        const types = pokemonData.types.map((type) => type.type.name);
+        createCard(`#${pokemonData.id} ${pokemonData.name}`, pokemonData.sprites.front_default, types);
+      });
+
+      hideLoader();
     });
   });
 
