@@ -55,14 +55,23 @@ function createCardHeader(cardElt, imageUrl) {
 
 function createCardBody(card, title) {
   const cardBodyElt = createAndAppendElement("div", card, "card-body");
-  return createAndAppendTextElement("h2", cardBodyElt, title, 'card-title');
+  return createAndAppendTextElement("h2", cardBodyElt, title, "card-title");
 }
 
 function createPokemonTypesElements(cardBodyElt, types) {
-  const pokemonTypesElt = createAndAppendElement("ul", cardBodyElt, "pokemon-types");
+  const pokemonTypesElt = createAndAppendElement(
+    "ul",
+    cardBodyElt,
+    "pokemon-types"
+  );
 
   types.forEach((pokemonType) => {
-    const pokemonTypeElt = createAndAppendTextElement("li", pokemonTypesElt, pokemonType, "pokemon-type");
+    const pokemonTypeElt = createAndAppendTextElement(
+      "li",
+      pokemonTypesElt,
+      pokemonType,
+      "pokemon-type"
+    );
     pokemonTypeElt.style.backgroundColor = pokemonTypesColors[pokemonType];
   });
 }
@@ -85,25 +94,63 @@ function showPagination() {
   paginationElt.classList.add("shown");
 }
 
-fetchData(listUrl, 1500)
-  .then((listData) => {
-    const pokemons = listData.results;
+function createAndShowPagination(totalElements, itemsPerPage, selectedPageNumber) {
+  const nbPages = Math.floor(totalElements / itemsPerPage);
+  createAndAppendTextElement(
+    "button",
+    paginationElt,
+    "<",
+    "pagination-element pagination-arrow pagination-arrow-left"
+  );
 
-    Promise.all(pokemons.map(pokemon => fetchData(pokemon.url)))
-    .then((pokemonsData) => {
-      const sortedPokemonsData = pokemonsData.sort((pokemonA, pokemonB) => pokemonA.id < pokemonB.id);
-      
+  for (let i = 0; i < nbPages; i++) {
+    const paginationNumberElt = createAndAppendTextElement(
+      "button",
+      paginationElt,
+      i + 1,
+      "pagination-element pagination-number"
+    );
+    if (selectedPageNumber === i + 1) {
+      paginationNumberElt.classList.add("active");
+    }
+  }
+
+  createAndAppendTextElement(
+    "button",
+    paginationElt,
+    ">",
+    "pagination-element pagination-arrow pagination-arrow-right"
+  );
+
+  showPagination();
+}
+
+fetchData(listUrl, 1500).then((listData) => {
+  console.log(listData);
+  const pokemons = listData.results;
+
+  Promise.all(pokemons.map((pokemon) => fetchData(pokemon.url))).then(
+    (pokemonsData) => {
+      const sortedPokemonsData = pokemonsData.sort(
+        (pokemonA, pokemonB) => pokemonA.id < pokemonB.id
+      );
+
       sortedPokemonsData.forEach((pokemonData) => {
         const types = pokemonData.types.map((type) => type.type.name);
-        createCard(`#${pokemonData.id} ${pokemonData.name}`, pokemonData.sprites.front_default, types);
+        createCard(
+          `#${pokemonData.id} ${pokemonData.name}`,
+          pokemonData.sprites.front_default,
+          types
+        );
       });
 
       hideLoader();
-      showPagination();
-    });
-  });
+      createAndShowPagination(150, 10, 1);
+    }
+  );
+});
 
 async function fetchData(url, timeout = 0) {
   const json = await fetch(url).then((response) => response.json());
-  return new Promise(resolve => setTimeout(() => resolve(json), timeout));
+  return new Promise((resolve) => setTimeout(() => resolve(json), timeout));
 }
