@@ -22,8 +22,8 @@ const pokemonTypesColors = {
   fairy: "#D685AD",
 };
 
-// On stoque dans la variable cards le div avec la classe cards
 const cards = document.querySelector(".cards");
+const loaderContainerElt = document.querySelector(".loader-container");
 
 function createAndAppendElement(elementType, parentElt, classesString) {
   const classes = classesString.split(" ");
@@ -76,18 +76,24 @@ function createCard(title, imageUrl, types) {
   createPokemonTypesElements(cardBodyElt, types);
 }
 
-fetch(listUrl)
-  .then((response) => response.json())
+function hideLoader() {
+  loaderContainerElt.classList.add("hidden");
+}
+
+fetchData(listUrl, 3000)
   .then((listData) => {
     const pokemons = listData.results;
-
     pokemons.forEach((pokemon) => {
-      fetch(pokemon.url)
-        .then((response) => response.json())
+      fetchData(pokemon.url)
         .then((data) => {
-          console.log(data);
           const types = data.types.map((type) => type.type.name);
           createCard(data.name, data.sprites.front_default, types);
+          hideLoader();
         });
     });
   });
+
+async function fetchData(url, timeout = 0) {
+  const json = await fetch(url).then((response) => response.json());
+  return new Promise(resolve => setTimeout(() => resolve(json), timeout));
+}
