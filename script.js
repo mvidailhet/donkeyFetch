@@ -24,6 +24,7 @@ const pokemonTypesColors = {
 
 const cards = document.querySelector(".cards");
 const loaderContainerElt = document.querySelector(".loader-container");
+const paginationElt = document.querySelector(".pagination");
 
 function createAndAppendElement(elementType, parentElt, classesString) {
   const classes = classesString.split(" ");
@@ -80,6 +81,10 @@ function hideLoader() {
   loaderContainerElt.classList.add("hidden");
 }
 
+function showPagination() {
+  paginationElt.classList.add("shown");
+}
+
 fetchData(listUrl, 1500)
   .then((listData) => {
     const pokemons = listData.results;
@@ -94,6 +99,7 @@ fetchData(listUrl, 1500)
       });
 
       hideLoader();
+      showPagination();
     });
   });
 

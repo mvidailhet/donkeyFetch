@@ -6,6 +6,10 @@
   display: none !important;
 }
 
+.shown {
+  display: block !important;
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -112,3 +116,34 @@ ul {
     transform: rotate(360deg);
   }
 }
+
+footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.pagination {
+  display: none;
+}
+
+.pagination-element {
+  display: inline-block;
+  padding: 8px 16px;
+  font-weight: bold;
+  border: 1px solid coral;
+  cursor: pointer;
+  background-color: transparent;
+  border-radius: 5px;
+}
+
+.pagination-element:hover {
+  background-color: #bcbbbb;
+}
+
+.pagination-element.active {
+  background-color: coral;
+}
+
