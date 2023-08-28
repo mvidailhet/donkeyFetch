@@ -45,11 +45,13 @@ function createCard(title, imageUrl) {
   cardImg.style.backgroundImage = `url(${imageUrl})`;
   cardImg.classList.add("card-img");
   cardHeader.appendChild(cardImg);
-  
-  
+
   /**
    * Étape 1: Créez la div cardBody, ajoutez la classe card-body et ajoutez-la à la carte
    */
+  const cardBody = document.createElement("div");
+  cardBody.classList.add("card-body");
+  card.appendChild(cardBody);
 
   /**
    * Étape 2
@@ -57,13 +59,10 @@ function createCard(title, imageUrl) {
    * définissez le texte à l'intérieur de la balise sur le paramètre "title" de cette fonction
    * et ajoutez-le à la cardBody
    */
-
-  /**
-   * Étape 3
-   * Créez le bouton cardButton, ajoutez la classe card-button,
-   * définissez le texte à l'intérieur de la balise sur "Adopt Now"
-   * et ajoutez-le à la cardBody
-   */
+  const cardTitle = document.createElement("h2");
+  cardTitle.classList.add("card-title");
+  cardTitle.textContent = title;
+  cardBody.appendChild(cardTitle);
 }
 
 /**
@@ -72,8 +71,12 @@ function createCard(title, imageUrl) {
  * appelez la fonction createCard avec le paramètre correspondant
  */
 
+for (let i = 0; i < animalsToAdopt.length; i++) {
+  createCard(animalsToAdopt[i].name, animalsToAdopt[i].picture);
+}
 
-fetch(listUrl)
+
+/* fetch(listUrl)
 .then(response => response.json())
 .then((listData) => {
   const pokemons = listData.results;
@@ -85,4 +88,4 @@ fetch(listUrl)
       console.log(data);
     })
   });
-});
+}); */
